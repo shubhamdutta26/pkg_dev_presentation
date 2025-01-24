@@ -1,0 +1,27 @@
+color:
+  palette:
+    dark-grey: "#F4F5F6"
+    navy-blue: "#2D3047"
+    coral: "#E76F51"
+  foreground: navy-blue
+  background: dark-grey
+  primary: coral
+
+typography:
+  fonts:
+    - family: Roboto Slab
+      source: google
+    - family: Roboto
+      source: google
+    - family: JetBrains Mono
+      source: google
+  base: Roboto Slab
+  headings: Roboto
+  link:
+    decoration: underline
+  monospace: JetBrains Mono
+  monospace-inline:
+    color: "#222222"
+    background-color: "#ddeaf1" # or use a named color from `color`
+  monospace-block:
+    background-color: "#eef4f8"

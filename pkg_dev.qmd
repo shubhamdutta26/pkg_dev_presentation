@@ -1,0 +1,638 @@
+---
+pagetitle: 'R - Package Development'
+author:  'Shubham Dutta, Ph.D.'
+format: 
+  revealjs:
+    theme: custom_theme.scss
+    height: 1080
+    width: 1920
+    slide-number: true
+    preview-links: true
+    transition: fade
+    background-transition: fade
+---
+
+#  {background-image="images/title.png" position="absolute" background-size="30em" background-position="200px center"}
+
+[Package development<br>in {{< fa brands r-project >}}]{.custom-title}
+
+[Shubham Dutta, Ph.D.]{.custom-author}
+
+[Senior Research Scientist]{.custom-position}
+
+[The Non Human Primate Reagent Resource]{.custom-url-nhprr}
+
+[Department of Medicine, UMMS]{.custom-url-umms}
+
+[March 14^th^, 2025]{.title-date}
+
+## Why learn {{< fa brands r-project >}} package development? {background-image="images/why_pkg_dev.png" background-size="30em"}
+
+::: notes
+Hello everyone, Welcome back to the channel. Today we will learn about package development in R. Why do we care about package development? Packages makes it easier to organize, document, and share our R code.
+
+Often times our R code is unstructured. When we go back to the code a few weeks or a few months down the line it gets harder to read through and understand the code. Package development enforces a structured framework that makes our code easier to read and maintain. The functions and documentation live in standardized locations, creating a natural template for organizing complex work.
+
+The package development framework comes with built-in tools for documentation (roxygen2) and testing (testthat), encouraging better coding practices. These integrated tools help maintain high-quality code with minimal effort.
+
+Packages are R's native way of sharing code, making it simple for others to use your work. This standardized format ensures seamless integration with existing R workflows.
+:::
+
+## Install {{< fa brands r-project >}} package development tools
+
+::: {.fragment .fade-up}
+![](images/devtools.png)
+:::
+
+::: notes
+We need a few packages to begin developing our own R packages. Devtools is the main workhorse for package development. It has functions that simplify and expedite common tasks. The Roxygen2 package is need for code documentation. The testthat package helps to test our code and finally the knitr helps us to create website for the package.
+
+Once you install these packages you will call the library function to attach devtools to the search path of R's current session. Every time you start working on your package you will need to load devtools and once you start making packages you will see that this step will become annoying. To get around this, you might want to edit the .Rprofile file which I am going to show next.
+:::
+
+## Modify `.Rprofile`
+
+::: {.fragment .fade-up}
+[Manually]{style="color: #E76F51; font-size: 1.5em; font-weight: bold"}
+
+The `.Rprofile` typically lives in these locations:
+
+-   Windows: `C:/Users/YourUsername/Documents/.Rprofile`
+
+-   Mac/Linux: `~/.Rprofile`
+:::
+
+::: {.fragment .fade-up}
+[Using R]{style="color: #E76F51; font-size: 1.5em; font-weight: bold"}
+
+Open `.Rprofile`
+
+![](images/edit_R_profile.png)
+:::
+
+::: {.fragment .fade-up}
+[Modify `.Rprofile`]{style="color: #E76F51; font-size: 1.5em; font-weight: bold"}
+
+![](images/devtools_rprofile.png)
+:::
+
+::: notes
+The .Rprofile file is a special R script that runs automatically every time you start an R session. Think of it as your personal R configuration file. You can add a few lines of code to this file such that every time you load R, the devtools package will always be added to the search path in the R session (search() function). You can edit the .Rprofile file either manually by finding the file in these locations or by using the `edit_r_profile()` function from the usethis package. The file is usually located in these directories. You can add this code there which will load devtools now every time you start R.
+
+Now we are ready to start package development in R.
+:::
+
+## `create_package()`
+
+![](images/create_pak.png)
+
+::: {.fragment .fade-up}
+![](images/initial.png)
+:::
+
+::: notes
+The first function that we will use is the create_package function creates a starting template for the package at your desired location. Today we will be creating a package called tempconvertR that will have functions to convert temperatures form celsius to farenheit scale.
+:::
+
+## Package folder structure
+
+![](images/create_pak.png)
+
+::: {.fragment .fade-up}
+![](images/tree1.png)
+:::
+
+::: notes
+The create_package function creates several important files within the package directory such as Description, Namespace, and importantly a R directory where all the code will live. We will be discussing the importance of each of these files later in this video.
+:::
+
+## `use_git()`
+
+![](images/git1.png) ![](images/git2.png)
+
+::: aside
+Learn how to setup git/Github in RStudio: [Let's Git started](https://happygitwithr.com/)
+:::
+
+::: notes
+Before making further changes the best practice is to make this directory a git repository that will track all the subsequent changes. To do this you can run the use_git function. Running use_git in an interactive session, will ask you to commit some files here and which you should accept. This will add a new hidden directory called .git which will now track all changes that you will make in this package going forward.
+:::
+
+## The `R` subdirectory will contain package functions
+
+![](images/tree1.png)
+
+::: notes
+If you look at the package directory it will have a subdirectory called R where all our R code will live.
+:::
+
+## `use_r()`
+
+![](images/use_r.png)
+
+::: {.fragment .fade-up}
+![](images/tree2.png)
+:::
+
+::: notes
+Let's say we want to write a function that converts temperature from the celcius to farenheit scale. To do this we will call the use_r function which will create a new file in the R subdirectory named celcius_to_farenheit.
+:::
+
+## Our first function
+
+![](images/c2f.png)
+
+::: notes
+Now, we will write this simple function that converts temperature from the celcius to farenheit scale in this recently created R file and save it.
+:::
+
+## Time for a test drive
+
+::: {.fragment .fade-up}
+![](images/load_all.png)
+
+Hotkey: `Cmd/Ctrl + Shift + L`
+:::
+
+::: {.fragment .fade-up}
+![](images/run_after_load.png)
+:::
+
+::: notes
+Let's test how this function works. Before testing first we need make this function available in our R session. We will not run this function code and make it available in the global environment. Instead we call load_all() function. The `load_all()` simulates installing and loading your package, loading all R code in R subdirectory. We can now test the function which returns a valid output. Great. We now have our first working function in this package.
+
+Something to note here is the function load_all() has made the celcius_to_farenheit() function available, although it does not exist in the global environment. You should not see it in the Environment tab in RStudio. If you see it in the global environment it means you are still using a script-oriented workflow and sourcing your functions from the global environment. To fix this you need to restart R and RStudio and load devtools and then call the load_all() function.
+:::
+
+## Workflow
+
+![](images/first_workflow.png)
+
+::: notes
+Lets summarise what we have learnt up until now. We call the create_package function to create a barebones package directory, then write and edit code in the R subdirectory using the use_r function. Finally, we make the function available using load_all() to test them.
+:::
+
+## `check()`
+
+![](images/check.png)
+
+::: {.fragment .fade-up}
+![](images/first_check.png)
+:::
+
+::: notes
+We have informal evidence that celcius_to_farenheit() works. But how can we be sure that this package tempconverteR as a whole is working? For this we will run the check function which runs R CMD Check under the hood to make sure that the package as a whole is intact and working. Think of it as a quality control system that runs a series of standardized tests on your package which checks for code validation, documentation, structure, and cross-platform compatibility.
+:::
+
+## `check()`
+
+![](images/first_check.png)
+
+-   `Cmd+Shift+E` (Mac) or `Ctrl+Shift+E` (Windows/Linux)
+-   `check()` early and often
+-   Reduce future pain by catching problems early
+
+::: notes
+Everytime you make changes to your package you should run the check function to make sure there are no errors, warning or notes. The check function helps us with catching problems early and fixing it. We see that we are getting a warning after we ran our first check on our package. We will be fixing it shortly but before that lets take a look at what errors, warnings and notes are.
+:::
+
+## R CMD check
+
+[3 types of messages]{style="color: #E76F51; font-size: 1.5em; font-weight: bold"}
+
+::::: {.fragment .fade-up}
+::: {style="font-size: 1.5em;"}
+**errors**
+:::
+
+::: callout-important
+-   Severe problems - always fix.
+:::
+:::::
+
+::::: {.fragment .fade-up}
+::: {style="font-size: 1.5em;"}
+**warnings**
+:::
+
+::: callout-warning
+-   Problems that you should fix, and must fix if you’re planning to submit to CRAN.
+:::
+:::::
+
+::::: {.fragment .fade-up}
+::: {style="font-size: 1.5em;"}
+**notes**
+:::
+
+::: callout-note
+-   Mild problems or, in a few cases, just an observation. When submitting to CRAN, try to eliminate all NOTEs.
+:::
+:::::
+
+::: notes
+There are three types of messages you can get when you run check on your package. There are errors which indicate severe problems that you have to fix for the package to work properly. The second type of message is the warning. These are the problems you should try to fix and must fix if you want to submit your package to CRAN or Bioconductor repositories. The third and final message is a note. These indicate mild issues which you may not fix but definitely try to eliminate if you want to submit your package to CRAN or Bioconductor repositories.
+:::
+
+## License information missing in the `DESCRIPTION` file
+
+![](images/check_cropped.png)
+
+![](images/tree2.png)
+
+::: notes
+When we ran the first check on our tempconvertR package we saw that there was a warning message. Looking closely we see that the warning is because of a missing licence file for the package. Lets take a look at the decription file more closely to see how we can fix this warning.
+:::
+
+## No License information in the `DESCRIPTION` file
+
+![](images/desc_first.png)
+
+::: notes
+Looking at the description file we can see that we need to add a lot of stuff here including the license information. That is why we are getting a warning message when we ran check. We are going to fix the warning by adding the license information first and later in the video we will be adding more stuff to the decription file.
+:::
+
+## Licenses
+
+[use\_\*\_license()]{style="color: #E76F51; font-size: 1.5em; font-weight: bold"}
+
+::: {style="font-size: 1.5em;"}
+-   **MIT:** simple and permissive.
+-   **Apache 2.0:** MIT + provides patent protection.
+-   **CC-BY:** Free to share and adapt, must give appropriate credit.
+-   and many more.
+:::
+
+::: notes
+Let's talk about R package licenses. In R, you can easily set up licenses using the use\_\*\_license() functions from the usethis package. The most common ones you'll encounter are: The MIT license, which is simple and permissive - basically letting others use your code however they want while protecting you from liability. Apache 2.0 is similar but adds explicit patent protection, which is great if you're worried about patent issues. CC-BY is more commonly used for documentation and educational materials - it lets people share and modify your work as long as they credit you. While these are the most common, there are many other licenses available depending on your specific needs. Just remember - choosing a license is important because it tells others exactly how they can use your code and protects both you and your users. Lets add the MIT license to our package.
+:::
+
+## `use_mit_license()`
+
+![](images/mit.png){width="1220"} ![](images/desc_mit.png){width="1220"}
+
+::: notes
+We will the use_mit_license() function to add the MIT licence. This modifies the license information in the DESCRIPTION file and add a couple of license file to the R package directory as well.
+:::
+
+## The `DESCRIPTION` file
+
+::::: columns
+::: {.column width="40%"}
+![](images/tree2_edited.png)
+:::
+
+::: {.column width="60%"}
+![](images/description_edited.png)
+:::
+:::::
+
+-   Edit the `DESCRIPTION` file manually
+-   Use `desc` [^1] package
+
+[^1]: Programmatically edit DESCRIPTION using [desc](https://desc.r-lib.org/)
+
+::: notes
+The job of the DESCRIPTION file is to store important metadata about your packages such as version, authors, licences and so on and so forth. DESCRIPTION uses a simple file format called DCF, the Debian control format where each line consists of a field name and a value, separated by a colon. When values span multiple lines, they need to be indented. You can either edit the description manually or using the desc package. As you can see that I have added modified the Title and Description that reflect what the package tempconverR does. One thing to remember is that the Title must always be one line and in title case.
+:::
+
+## Edit `.Rprofile` using `edit_r_profile()`
+
+![](images/full_rprofile.png){width="1100"}
+
+-   Setup R profile with [`usethis`](https://usethis.r-lib.org/articles/usethis-setup.html)
+-   Initialization at Start of an [R Session](https://stat.ethz.ch/R-manual/R-patched/library/base/html/Startup.html)
+-   Kevin Ushey’s blog post on [.Rprofile essentials](https://kevinushey.github.io/blog/2015/02/02/rprofile-essentials/)
+
+::: notes
+If you create a lot of packages, you can pre-configure your preferred name, email, license, etc in your .Rprofile file. We had already modified this file before where we add the first block quietly loads the devtools package. The second block sets up your default package author information using options function. Think of it as your package's business card - it includes your name, email, ORCID identifier, and defines your roles: author ("aut"), maintainer ("cre"), and copyright holder ("cph"). It also sets MIT as your default license. This template saves time when creating new packages since you won't need to input this information repeatedly. If you want to learn more about how you can edit .Rprofile I have added some reading materials in the description.
+:::
+
+## `check()`
+
+![](images/second_check.png)
+
+::: notes
+We modified our package and it is time to run a check. If everything is ok we should not see any errors, warnings, or notes.
+:::
+
+## Workflow
+
+![](images/second_workflow.png)
+
+::: notes
+Lets summarise what we have learnt up until now. We will write and edit code in the R directory. We will make the function available using load_all() and we run the functions to test them and run check as many times as we need to validate that our package as a whole is in good shape. Any questions?
+:::
+
+## Commit changes to git from RStudio {{< fa brands git-alt >}}
+
+![](images/git.png)
+
+::: notes
+Since our package is in good working condition lets add the changes to our git repository. We can do this either throught RStudio by clicking the git tab and then commiting the files with a message or we can use the terminal command git add to add the files and git commit to add a message and update our git repository. This is not a git tutorial and we are not going to talk about git here. If you want a git tutorial video please let me know in the comments section and I will try to make a one for you guys.
+:::
+
+## Commit changes to git from terminal {{< fa brands git-alt >}}
+
+::: {.fragment .fade-up}
+![](images/git_add.png)
+:::
+
+::: {.fragment .fade-up}
+![](images/git_commit.png)
+:::
+
+::: notes
+:::
+
+## Use github {{< fa brands github >}}
+
+[Put your package code on GitHub]{style="color: #f76707; font-size: 1.5em; font-weight: bold"}
+
+-   GitHub account
+-   `create_github_token()` - follow instructions
+-   `gitcreds::gitcreds_set()` - paste PAT
+-   `git_sitrep()` - verify
+
+`use_github()` - push content to new repository on GitHub
+
+::: aside
+Learn how to setup git/Github in RStudio: [Let's Git started](https://happygitwithr.com/)
+:::
+
+::: notes
+GitHub is essential for package development and collaboration. I am going to briefly talk about how you can sync your repository with Github. First, you will need to create a GitHub account if you don't have one. Once you have a github account you can use create_github_token() to generate a Personal Access Token - it's like a secure password for R to interact with GitHub. Store this token using gitcreds::gitcreds_set(). Once the token is stored you can run git_sitrep() to confirm everything's connected properly. Now you are ready to sync your package to github. To do this use the function use_github() that will push your package to a new GitHub repository. This is a very short introduction to Github since this is out of scope for this video. If you're new to Git and GitHub with RStudio, you can check out 'Happy Git with R' at happygitwithr.com for detailed setup instructions. The link is in the description.
+:::
+
+## Document code using `roxygen2` package
+
+::::: columns
+::: {.column width="40%"}
+Adds special comments (`#'`)
+
+Function help `?your_function`
+
+[Roxygen tags]{style="color: #E76F51; font-size: 1.5em; font-weight: bold"}
+
+-   Title
+
+-   Description (`@description`)
+
+-   Parameters (`@param`)
+
+-   Return value (`@return`)
+
+-   Export tag (`@export`)
+
+-   Example usage (`@examples`)
+
+-   For internal functions (`@keywords internal`)
+:::
+
+::: {.column width="60%"}
+![](images/roxygen.png)
+:::
+:::::
+
+::: notes
+Documentation is an integral part of any type of software development. For R package we will be using the roxygen2 package. The roxygen2 package creates your package documentation directly from your source code using special comments that start with \#'. This approach ensures documentation stays synchronized with your code and reduces maintenance overhead. Roxygen2 helps in
+
+Generates function help files automatically that you can access with the ? Maintains documentation next to the actual code Creates NAMESPACE file entries Enforces consistent documentation structure across R packages
+
+On the right we can see how roxygen would document the function that we wrote. We can see that roxygen2 comments start with hash apostrophe. All the roxygen2 comments preceding a function are collectively called a block. Blocks are broken up by tags, which look like @tagName tagValue, and the content of a tag extends from the end of the tag name to the start of the next tag. There are a large number of tags and lets look at some of the essential tags.
+
+The title is taken from the first sentence. It should be written in sentence case, not end in a full stop, and be followed by a blank line. In the description tag we should briefly describe the most important features of the function.
+
+The param tags are used document function argument. Typically there is a param tag for each argument. The return tag specifies what the function returns Under the examples tag we have to demonstrate how to use the function The export makes function available to users. For internal functions set the @keywords tag as internal. This will hide internal functions from users.
+
+In our case the function must be made available to the user so we add the export tag.
+
+There are several other roxygen tags which you can look up in the Roxygen2 package documentation.
+:::
+
+## Insert `Roxygen` skeleton
+
+::::: columns
+::: {.column width="40%"}
+-   Click anywhere on your code
+-   `Code` \> `Insert roxygen skeleton`
+:::
+
+::: {.column width="60%"}
+![](images/roxygen.png)
+:::
+:::::
+
+::: notes
+To insert Roxygen skeleton click anywhere on your code. Then navigate to Code and click Insert roxygen skeleton. You can then edit the roxygen code.
+:::
+
+## Generate code documentation using `document()`
+
+::::: columns
+::: {.column width="50%"}
+[Roxygen code]{style="color: #E76F51; font-size: 1.5em; font-weight: bold"} ![](images/roxygen.png){width="1100"}
+:::
+
+::: {.column width="50%"}
+[\*.Rd file in `man/`]{style="color: #E76F51; font-size: 1.5em; font-weight: bold"} ![](images/document.png){width="1100"}
+:::
+:::::
+
+::: notes
+Once you have inserted the roxygen code use the document function to generate detailed R documentation which can be accessed by the question mark symbol in the R console. The document funciton creates a .Rd file in the man/ directory.
+:::
+
+## Roxygen2 and `document()` generates help files
+
+::::: columns
+::: {.column width="35%"}
+-   `?myfunction`
+:::
+
+::: {.column width="65%"}
+![](images/question.png)
+:::
+:::::
+
+::: notes
+As you can see here help files for functions are generated using Roxygen2 and document automatically.
+:::
+
+## NAMESPACE
+
+-   Lists R objects that are:
+    -   Exported from your package to be used by package users
+
+        `export()`, `S3method()`, etc.
+
+    -   Imported from another package to be used internally by your package
+
+        `import()`, `importFrom()`, etc.
+-   `document()` updates the NAMESPACE file with directives from Roxygen comments in your R code
+
+::: notes
+:::
+
+## `check()` again
+
+![](images/second_check.png)
+
+## Workflow
+
+## `install()` your package
+
+![](images/install.png)
+
+![](images/install_output.png)
+
+::: notes
+Now that we know we have a minimum viable product, let’s install the tempconvertR package into your library via install()
+:::
+
+## `install()` your package
+
+![](images/library.png)
+
+::: {.fragment .fade-up}
+![](images/run_after_load.png)
+:::
+
+::: notes
+After installation is complete, we can attach and use tempconvertR like any other package. Let’s revisit our small example from the top. This is also a good time to restart your R session and ensure you have a clean workspace.
+:::
+
+## Test functions with `use_testthat()`
+
+::: {.fragment .fade-up}
+![](images/use_testthat.png)
+:::
+
+::: notes
+We’ve tested celsius_to_farenheit() informally, in a single example. We can formalize this as a unit test. This means we express a concrete expectation about the correct celsius_to_farenheit() result for a specific input.
+
+First, we declare our intent to write unit tests and to use the testthat package for this, via use_testthat(): This initializes the unit testing machinery for your package. It adds Suggests: testthat to DESCRIPTION, creates the directory tests/testthat/, and adds the script tests/testthat.R.
+:::
+
+## Add tests for your functions
+
+![](images/use_test.png)
+
+::: {.fragment .fade-up}
+![](images/tests.png)
+:::
+
+::: notes
+The helper use_test() opens and/or creates a test file. You can provide the file’s basename as well.
+:::
+
+## Run tests with `test()`
+
+![](images/run_tests.png)
+
+::: notes
+:::
+
+## Use external packages
+
+![](images/modify.png)
+
+## Update tests
+
+![](images/updated_tests.png)
+
+## `check()` returns a warning
+
+![](images/check_warn.png)
+
+## Add external packages with `use_package()`
+
+![](images/add_tibble.png){width="1300"}
+
+![](images/updated_desc.png){width="1300"}
+
+## `check()` again
+
+![](images/second_check.png)
+
+## `use_readme_rmd()`
+
+![](images/use_readme_rmd.png)
+
+## Edit `README.Rmd`
+
+![](images/readme_temp.png)
+
+## `build_readme()`
+
+![](images/build_readme.png)
+
+## Final steps
+
+-   `check()`
+-   `install` package to your library
+-   `commit` and `push` to Github
+
+## Summary of R package development
+
+:::::: columns
+::: {.column width="28%"}
+[Run once per package]{style="color: #E76F51; font-size: 1.0em; font-weight: bold"}
+
+-   `create_package()`
+-   `use_git()`
+-   `use_*_license()`
+-   `use_testthat()`
+-   `use_github()`
+-   `use_readme_rmd()`
+:::
+
+::: {.column width="44%"}
+[New functions, tests, or dependencies]{style="color: #E76F51; font-size: 1.0em; font-weight: bold"}
+
+-   `use_r()`
+-   `use_test()`
+-   `use_package()`
+:::
+
+::: {.column width="28%"}
+[Run multiple times]{style="color: #E76F51; font-size: 1.0em; font-weight: bold"}
+
+-   `load_all()`
+-   `document()`
+-   `test()`
+-   `check()`
+:::
+::::::
+
+::: aside
+This list is used from [R Packages (2e)](https://r-pkgs.org/)
+:::
+
+## Review
+
+![](images/final_review.png){width="1350"}
+
+::: aside
+Image from [R Packages (2e)](https://r-pkgs.org/)
+:::
+
+## Further reading
+
+Software and Package development
+
+-   [R Packages (2e)](https://r-pkgs.org/)
+
+-   [Mastering Software Development in R](https://bookdown.org/rdpeng/RProgDA/)
+
+Data analysis
+
+-   [R for Data Science (2e)](https://r4ds.hadley.nz/)
+
+-   [The R Book](https://onlinelibrary.wiley.com/doi/book/10.1002/9781118448908)
+
+Advanced R users
+
+-   [The R Inferno](https://www.burns-stat.com/pages/Tutor/R_inferno.pdf)
+
+-   [Advanced R](https://adv-r.hadley.nz/)
